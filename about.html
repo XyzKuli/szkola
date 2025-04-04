@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 
@@ -104,34 +104,59 @@
 </header>
 
 <section class="title-section text-left text-sm-center revealator-slideup revealator-once revealator-delay1">
-    <h1>STATY <span>STYKI</span></h1>
-    <span class="title-bg">STATYSTYKI</span>
+    <h1>O <span>Nas</span></h1>
+    <span class="title-bg">O Nas</span>
 </section>
 
 <section class="main-content revealator-slideup revealator-once revealator-delay1">
     <div class="container">
-        <p>xxxx</p>
-        <div id="clients">Pobieranie danych...</div>
-
-        <script>
-            fetch("http://83.168.105.129:30120/info.json")
-                .then(res => res.json())
-                .then(info => {
-                    fetch("http://83.168.105.129:30120/players.json")
+        <p id="typing-text"></p>
+                <div id="clients">Pobieranie danych...</div>
+                <script>
+                    const text = "Pan Dariusz jest najlepszy";
+                    const typingElement = document.getElementById("typing-text");
+                    let index = 0;
+                
+                    function typeWriter() {
+                        if (index < text.length) {
+                            typingElement.innerHTML += text.charAt(index);
+                            index++;
+                            setTimeout(typeWriter, 100);
+                        }
+                    }
+                    typeWriter();
+                    const messages = [
+                        "Jakaś 6 na koniec?",
+                        "Wiem, że po terminie",
+                        "Pan Dariusz to GOAT 🐐",
+                        "Polska kadra się rozpędza...",
+                        "Dawid Markiewicz nigdy nie wie co sie dzieje na lekcji xd"
+                    ];
+                    const clientsDiv = document.getElementById("clients");
+                    let messageInterval = setInterval(() => {
+                        const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+                        clientsDiv.innerHTML = randomMsg;
+                    }, 3500);
+                    fetch("http://83.168.105.129:30120/info.json")
                         .then(res => res.json())
-                        .then(players => {
-                            document.getElementById("clients").innerHTML = players.length + "/" + info.vars.sv_maxClients;
+                        .then(info => {
+                            fetch("http://83.168.105.129:30120/players.json")
+                                .then(res => res.json())
+                                .then(players => {
+                                    clearInterval(messageInterval);
+                                    clientsDiv.innerHTML = players.length + "/" + info.vars.sv_maxClients;
+                                })
+                                .catch(error => {
+                                    console.error("Błąd przy pobieraniu graczy:", error);
+                                });
                         })
                         .catch(error => {
-                            console.error("Wystąpił błąd podczas pobierania danych graczy:", error);
+                            console.error("Błąd przy pobieraniu info.json:", error);
                         });
-                })
-                .catch(error => {
-                    console.error("Wystąpił błąd podczas pobierania informacji:", error);
-                });
-        </script>
+                </script>    
     </div>
 </section>
+
 
 <script src="js/jquery-3.5.0.min.js"></script>
 <script src="js/styleswitcher.js"></script>
